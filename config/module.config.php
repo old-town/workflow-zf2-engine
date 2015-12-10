@@ -5,10 +5,10 @@
  */
 namespace OldTown\Workflow\ZF2\Engine;
 
-use OldTown\Workflow\ZF2\Engine\Listener\WorkflowDispatchListenerFactory;
+
 use OldTown\Workflow\ZF2\Engine\Options\ModuleOptions;
 use OldTown\Workflow\ZF2\Engine\Options\ModuleOptionsFactory;
-use OldTown\Workflow\ZF2\Engine\Listener\WorkflowDispatchListener;
+
 
 $config = [
     'service_manager'           => [
@@ -17,7 +17,6 @@ $config = [
         ],
         'factories'          => [
             ModuleOptions::class => ModuleOptionsFactory::class,
-            WorkflowDispatchListener::class => WorkflowDispatchListenerFactory::class
         ],
         'abstract_factories' => [
 
@@ -29,6 +28,7 @@ $config = [
 
 
 return array_merge_recursive(
+    include __DIR__ . '/controller.config.php',
     include __DIR__ . '/router.config.php',
     $config
 );

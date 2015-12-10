@@ -5,7 +5,7 @@
  */
 namespace OldTown\Workflow\ZF2\Engine;
 
-
+use Zend\Mvc\Application;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
@@ -13,8 +13,9 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\DependencyIndicatorInterface;
-use OldTown\Workflow\ZF2\Engine\Listener\WorkflowDispatchListener;
-
+use Zend\View\View;
+use OldTown\Workflow\ZF2\Engine\ViewRenderer\EmptyModelStrategy;
+use OldTown\Workflow\ZF2\Engine\ViewRenderer\EmptyModelRenderer;
 
 /**
  * Class Module
@@ -59,11 +60,34 @@ class Module implements
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
-        /** @var WorkflowDispatchListener $injectWorkflowListener */
-        $injectWorkflowListener = $e->getApplication()->getServiceManager()->get(WorkflowDispatchListener::class);
-        $eventManager->attach($injectWorkflowListener);
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'));
     }
 
+
+    /**
+     * @param MvcEvent $e
+     * @throws \Zend\ServiceManager\Exception\ServiceNotFoundException
+     */
+    public function onRoute(MvcEvent $e)
+    {
+        /** @var Application $app */
+        $app = $e->getParam('application');
+        $sm = $app->getServiceManager();
+
+        if ($sm->has('View')) {
+
+            /** @var View $view */
+            $view   = $sm->get('View');
+
+            $eventManager = $view->getEventManager();
+
+            $renderer = new EmptyModelRenderer();
+            $listener = new EmptyModelStrategy($renderer);
+            $eventManager->attach($listener, 200);
+
+        }
+
+    }
 
     /**
      * @return mixed
