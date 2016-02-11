@@ -6,7 +6,7 @@
 namespace OldTown\Workflow\ZF2\Engine\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use OldTown\Workflow\ZF2\Service\Workflow;
+use OldTown\Workflow\ZF2\ServiceEngine\Workflow;
 use OldTown\Workflow\ZF2\Engine\ViewRenderer\EmptyModel;
 
 /**
@@ -24,8 +24,6 @@ class EngineController extends AbstractActionController
      *
      * @throws \OldTown\Workflow\ZF2\Engine\Controller\Exception\InvalidArgumentException
      * @throws \Zend\ServiceManager\Exception\ServiceNotFoundException
-     * @throws \OldTown\Workflow\ZF2\Service\Exception\InvalidInitializeWorkflowEntryException
-     * @throws \OldTown\Workflow\ZF2\Service\Exception\ActionNotFoundException
      */
     public function initializeAction()
     {
@@ -62,7 +60,6 @@ class EngineController extends AbstractActionController
      *
      * @throws \OldTown\Workflow\ZF2\Engine\Controller\Exception\InvalidArgumentException
      * @throws \Zend\ServiceManager\Exception\ServiceNotFoundException
-     * @throws \OldTown\Workflow\ZF2\Service\Exception\DoActionException
      */
     public function doAction()
     {
